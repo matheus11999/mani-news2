@@ -53,10 +53,31 @@ Certifique-se que o PostgreSQL está rodando:
 
 ## 5. 🔍 Troubleshooting
 
+### ❌ Erro "ENOSPC: no space left on device"
+Este erro indica falta de espaço em disco no container de build:
+
+**Soluções:**
+1. **Limpar Docker cache:**
+```bash
+docker system prune -a
+docker volume prune
+```
+
+2. **Usar Docker build mais eficiente:**
+```bash
+# Se disponível, use o Dockerfile customizado
+docker build -t mani-news .
+```
+
+3. **Configurar EasyPanel com mais espaço:**
+   - Aumente o limite de espaço do container
+   - Ou use um nó com mais espaço disponível
+
 ### Se o build falhar:
 - Verifique se as variáveis PostgreSQL estão corretas
 - Remova TODAS as variáveis MongoDB
 - Certifique-se que `NODE_ENV=production`
+- Verifique espaço em disco disponível
 
 ### Se não conectar no banco:
 ```bash
@@ -68,6 +89,9 @@ psql "postgres://mani:260520jm@evoapi_maninews-postgres:5432/mani?sslmode=disabl
 ```bash
 # Ver logs da aplicação
 docker logs [container-name]
+
+# Ver espaço em disco
+df -h
 ```
 
 ## 6. 📱 Pós-Deploy
