@@ -133,7 +133,7 @@ export class PostgresStorage implements IStorage {
       if (updateData.password) {
         updateData.password = await this.hashPassword(updateData.password);
       }
-      updateData.updatedAt = new Date();
+      // Remove updatedAt as it's not in the schema
       
       const result = await db.update(users)
         .set(updateData)
@@ -344,7 +344,7 @@ export class PostgresStorage implements IStorage {
   async updateArticle(id: string, article: Partial<InsertArticle>): Promise<Article | undefined> {
     try {
       const updateData = { ...article };
-      updateData.updatedAt = new Date();
+      // Remove updatedAt as it's not in the schema
       
       const result = await db.update(articles)
         .set(updateData)
@@ -413,8 +413,28 @@ export class PostgresStorage implements IStorage {
       const existing = await this.getSiteConfig();
       
       if (existing) {
-        const updateData = { ...config };
-        updateData.updatedAt = new Date();
+        const updateData = { 
+          siteName: config.siteName,
+          siteDescription: config.siteDescription,
+          siteKeywords: config.siteKeywords,
+          siteLogo: config.siteLogo,
+          favicon: config.favicon,
+          primaryColor: config.primaryColor,
+          secondaryColor: config.secondaryColor,
+          contactEmail: config.contactEmail,
+          socialMedia: config.socialMedia ? {
+            facebook: typeof config.socialMedia === 'object' && 'facebook' in config.socialMedia ? String(config.socialMedia.facebook) : undefined,
+            twitter: typeof config.socialMedia === 'object' && 'twitter' in config.socialMedia ? String(config.socialMedia.twitter) : undefined,
+            instagram: typeof config.socialMedia === 'object' && 'instagram' in config.socialMedia ? String(config.socialMedia.instagram) : undefined,
+            youtube: typeof config.socialMedia === 'object' && 'youtube' in config.socialMedia ? String(config.socialMedia.youtube) : undefined,
+          } : undefined,
+          seo: config.seo ? {
+            metaTitle: typeof config.seo === 'object' && 'metaTitle' in config.seo ? String(config.seo.metaTitle) : undefined,
+            metaDescription: typeof config.seo === 'object' && 'metaDescription' in config.seo ? String(config.seo.metaDescription) : undefined,
+            ogImage: typeof config.seo === 'object' && 'ogImage' in config.seo ? String(config.seo.ogImage) : undefined,
+            twitterCard: typeof config.seo === 'object' && 'twitterCard' in config.seo ? String(config.seo.twitterCard) : undefined,
+          } : undefined,
+        };
         
         const result = await db.update(siteConfig)
           .set(updateData)
@@ -422,8 +442,17 @@ export class PostgresStorage implements IStorage {
         return result[0];
       } else {
         // Create new if doesn't exist
+        const insertData = { 
+          siteName: config.siteName || "Mani News",
+          siteDescription: config.siteDescription || "Portal de notícias",
+          siteKeywords: config.siteKeywords || "notícias",
+          primaryColor: config.primaryColor || "#e50914",
+          secondaryColor: config.secondaryColor || "#dc2626",
+          contactEmail: config.contactEmail || "contato@maninews.com",
+        };
+        
         const result = await db.insert(siteConfig)
-          .values(config)
+          .values(insertData)
           .returning();
         return result[0];
       }

@@ -39,7 +39,7 @@ export function registerAdminRoutes(app: Express) {
         return res.status(400).json({ message: "Username already exists" });
       }
 
-      const existingEmail = await storage.getUserByEmail(userData.email);
+      const existingEmail = userData.email ? await storage.getUserByEmail(userData.email) : null;
       if (existingEmail) {
         return res.status(400).json({ message: "Email already exists" });
       }
@@ -50,7 +50,7 @@ export function registerAdminRoutes(app: Express) {
 
       const user = await storage.createUser({
         ...userData,
-        role,
+        role: role as "admin" | "user",
       });
 
       const { password: _, ...userWithoutPassword } = user;

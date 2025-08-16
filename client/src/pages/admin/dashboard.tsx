@@ -109,7 +109,7 @@ export default function AdminDashboard() {
                     </div>
                   ))}
                 </div>
-              ) : stats?.recentArticles?.length > 0 ? (
+              ) : stats?.recentArticles && stats.recentArticles.length > 0 ? (
                 <div className="space-y-4">
                   {stats.recentArticles.map((article: any) => (
                     <div key={article.id} className="flex items-start space-x-3">

@@ -8,6 +8,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().unique(),
+  fullName: text("full_name"),
   role: text("role").notNull().default("user"), // "admin" or "user"
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
@@ -45,6 +46,9 @@ export const articles = pgTable("articles", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  email: true,
+  fullName: true,
+  role: true,
 });
 
 export const insertCategorySchema = createInsertSchema(categories).omit({

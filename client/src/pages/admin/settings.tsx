@@ -357,7 +357,7 @@ export default function AdminSettings() {
                       maxLength={160}
                     />
                     <p className="text-xs text-gray-500">
-                      {formData.metaDescription.length}/160 caracteres
+                      {formData.metaDescription?.length || 0}/160 caracteres
                     </p>
                   </div>
 
