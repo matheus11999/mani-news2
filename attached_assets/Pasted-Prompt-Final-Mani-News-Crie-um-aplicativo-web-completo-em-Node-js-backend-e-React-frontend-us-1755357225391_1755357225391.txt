@@ -1,0 +1,117 @@
+Prompt Final — Mani News
+
+Crie um aplicativo web completo em Node.js (backend) e React (frontend) usando Tailwind CSS (versão estável), otimizado para dispositivos móveis e com suporte total a PWA.
+
+Identidade do aplicativo:
+
+Nome: Mani News
+
+Cor principal: vermelho (#e50914)
+
+Design mobile-first e responsivo.
+
+Requisitos de Frontend:
+
+Criar layout moderno com menu flutuante no header fixo, contendo botões para: "Início", "Categorias", "Buscar" e "Perfil".
+
+Página inicial listando posts com:
+
+Imagem destacada
+
+Título otimizado para SEO
+
+Resumo
+
+Data
+
+Botão de compartilhamento no WhatsApp (Web Share API e link direto com a URL da notícia).
+
+Página individual da notícia com:
+
+Conteúdo otimizado para SEO (HTML semântico, tags <h1>, <h2>, <p>, schema.org NewsArticle, JSON-LD).
+
+Imagem destacada (usada também como Open Graph image para compartilhamento).
+
+Tags/categorias clicáveis.
+
+Botões de compartilhamento para WhatsApp e outras redes sociais.
+
+Sistema de categorias com filtro.
+
+Busca de notícias por palavra-chave.
+
+PWA completo: manifest.json, service worker, cache offline, instalação no celular.
+
+Lazy loading para imagens.
+
+URLs amigáveis com slug da notícia.
+
+Suporte a metatags modernas para SEO 2025:
+
+Open Graph (Facebook, LinkedIn)
+
+Twitter Cards
+
+JSON-LD com schema.org
+
+Requisitos de Backend (Node.js + Express):
+
+Banco de dados MySQL ou MongoDB.
+
+API RESTful para CRUD de notícias, categorias, usuários e estatísticas.
+
+Autenticação JWT para proteger rotas do painel admin.
+
+Contagem de views por notícia (incremento ao acessar a página).
+
+Endpoint para retornar estatísticas de visualizações, notícias mais lidas, categorias mais acessadas.
+
+Dashboard Administrativo (React + Tailwind):
+
+Login com autenticação JWT.
+
+CRUD de notícias:
+
+Editor WYSIWYG com suporte a imagens.
+
+Definir título, conteúdo, categorias, tags, imagem destacada e metadados SEO.
+
+Campo para descrição otimizada para SEO.
+
+CRUD de categorias.
+
+Estatísticas:
+
+Gráficos de visualizações (últimos 7 dias, 30 dias, total).
+
+Notícias mais lidas.
+
+Categorias mais populares.
+
+Configurações gerais do site (nome, descrição, cores, ícone, SEO global).
+
+Funcionalidades extras:
+
+Scroll infinito ou paginação.
+
+Sistema de tags para SEO.
+
+Slug único para cada notícia.
+
+API preparada para futuras integrações.
+
+Estruture o projeto de forma limpa, modular, escalável, seguindo boas práticas de SEO, acessibilidade e performance.
+
+Se quiser, posso já te entregar o esqueleto do projeto Mani News com:
+
+package.json pronto
+
+Configuração PWA
+
+Estrutura de pastas organizada (backend, frontend, dashboard)
+
+Componentes React baseados no Tailwind
+
+API pronta para CRUD de notícias com estatísticas
+
+Dashboard já com login e gráficos.
