@@ -54,7 +54,21 @@ async function initializeDatabase() {
       .limit(1);
 
     if (adminUsers.length === 0) {
-      console.log("📝 No admin user found. You'll need to register at /admin/register");
+      console.log("📝 Creating default admin user...");
+      const defaultAdmin = {
+        username: "admin",
+        email: "admin@maninews.com",
+        fullName: "Administrador",
+        password: "admin123",
+        role: "admin" as const,
+      };
+      
+      await storage.createUser(defaultAdmin);
+      console.log("✅ Default admin user created:");
+      console.log("   Username: admin");
+      console.log("   Password: admin123");
+      console.log("   Email: admin@maninews.com");
+      console.log("🔑 IMPORTANTE: Altere a senha após o primeiro login!");
     } else {
       console.log("✅ Admin user exists");
     }

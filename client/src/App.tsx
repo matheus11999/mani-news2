@@ -14,6 +14,10 @@ import Search from "@/pages/search";
 import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/dashboard";
+import AdminArticles from "@/pages/admin/articles";
+import AdminCategories from "@/pages/admin/categories";
+import ArticleForm from "@/pages/admin/article-form";
+import AdminSettings from "@/pages/admin/settings";
 
 function Router() {
   return (
@@ -21,6 +25,11 @@ function Router() {
       {/* Admin routes */}
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/articles" component={AdminArticles} />
+      <Route path="/admin/articles/new" component={ArticleForm} />
+      <Route path="/admin/articles/edit/:id" component={ArticleForm} />
+      <Route path="/admin/categories" component={AdminCategories} />
+      <Route path="/admin/settings" component={AdminSettings} />
       
       {/* Public routes */}
       <Route path="/" component={Home} />
