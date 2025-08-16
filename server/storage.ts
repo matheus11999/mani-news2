@@ -142,7 +142,7 @@ export class MemStorage implements IStorage {
 
   async createCategory(category: InsertCategory): Promise<Category> {
     const id = randomUUID();
-    const newCategory: Category = { ...category, id };
+    const newCategory: Category = { ...category, id, color: category.color || "#6b7280" };
     this.categories.set(id, newCategory);
     return newCategory;
   }
@@ -199,7 +199,7 @@ export class MemStorage implements IStorage {
         (article.title.toLowerCase().includes(searchTerm) ||
          article.summary.toLowerCase().includes(searchTerm) ||
          article.content.toLowerCase().includes(searchTerm) ||
-         article.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+         (article.tags || []).some(tag => tag.toLowerCase().includes(searchTerm)))
       )
       .sort((a, b) => new Date(b.publishedAt!).getTime() - new Date(a.publishedAt!).getTime())
       .slice(0, limit);
@@ -217,7 +217,14 @@ export class MemStorage implements IStorage {
       id,
       views: 0,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      subtitle: article.subtitle || null,
+      imageCaption: article.imageCaption || null,
+      tags: article.tags || [],
+      metaDescription: article.metaDescription || null,
+      metaKeywords: article.metaKeywords || null,
+      published: article.published ?? false,
+      publishedAt: article.publishedAt || new Date()
     };
     this.articles.set(id, newArticle);
     return newArticle;

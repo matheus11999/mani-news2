@@ -4,10 +4,12 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/layout/header";
+import BottomNavigation from "@/components/layout/bottom-navigation";
 import InstallPrompt from "@/components/pwa/install-prompt";
 import Home from "@/pages/home";
 import Article from "@/pages/article";
 import Categories from "@/pages/categories";
+import Trending from "@/pages/trending";
 import Search from "@/pages/search";
 import NotFound from "@/pages/not-found";
 
@@ -18,6 +20,7 @@ function Router() {
       <Route path="/article/:slug" component={Article} />
       <Route path="/categories" component={Categories} />
       <Route path="/categories/:slug" component={Categories} />
+      <Route path="/trending" component={Trending} />
       <Route path="/search" component={Search} />
       <Route component={NotFound} />
     </Switch>
@@ -30,9 +33,10 @@ function App() {
       <TooltipProvider>
         <div className="min-h-screen bg-gray-50">
           <Header />
-          <main className="pt-16">
+          <main className="pt-14 pb-20 md:pb-4 md:pl-20">
             <Router />
           </main>
+          <BottomNavigation />
           <InstallPrompt />
           <Toaster />
         </div>

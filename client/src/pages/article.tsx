@@ -88,7 +88,7 @@ export default function Article() {
       <SEOHead
         title={`${article.title} | Mani News`}
         description={article.metaDescription || article.summary}
-        keywords={article.metaKeywords || article.tags.join(", ")}
+        keywords={article.metaKeywords || (article.tags || []).join(", ")}
         ogImage={article.featuredImage}
         articleData={{
           title: article.title,
@@ -96,7 +96,7 @@ export default function Article() {
           publishedTime: article.publishedAt?.toISOString() || new Date().toISOString(),
           modifiedTime: article.updatedAt?.toISOString() || new Date().toISOString(),
           section: article.category.name,
-          tags: article.tags,
+          tags: article.tags || [],
         }}
       />
 
@@ -203,11 +203,11 @@ export default function Article() {
         />
 
         {/* Article Tags */}
-        {article.tags.length > 0 && (
+        {(article.tags || []).length > 0 && (
           <div className="border-t border-gray-200 pt-6 mt-8">
             <h3 className="text-lg font-semibold mb-4">Tags relacionadas</h3>
             <div className="flex flex-wrap gap-2">
-              {article.tags.map((tag, index) => (
+              {(article.tags || []).map((tag, index) => (
                 <Badge 
                   key={index} 
                   variant="secondary" 
