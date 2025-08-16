@@ -14,7 +14,7 @@
     "check": "tsc --noEmit",
     "db:push": "drizzle-kit push",
     "db:init": "tsx scripts/init-db.ts",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build && npm run db:push && npm run db:init"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
