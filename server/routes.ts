@@ -1,9 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { registerAdminRoutes } from "./admin-routes";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register admin routes
+  registerAdminRoutes(app);
   // Categories endpoints
   app.get("/api/categories", async (req, res) => {
     try {

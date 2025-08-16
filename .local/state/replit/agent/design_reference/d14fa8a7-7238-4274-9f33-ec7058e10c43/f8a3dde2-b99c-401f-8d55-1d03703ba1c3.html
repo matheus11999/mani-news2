@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mani News - Notícias em Tempo Real</title>
+    <meta name="description" content="Acompanhe as últimas notícias em tempo real com o Mani News. Cobertura completa de política, economia, esportes e mais.">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#e50914">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Mani News">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Mani News - Notícias em Tempo Real">
+    <meta property="og:description" content="Acompanhe as últimas notícias em tempo real">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://maninews.com">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mani News - Notícias em Tempo Real">
+    <meta name="twitter:description" content="Acompanhe as últimas notícias em tempo real">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mani News",
+      "description": "Portal de notícias em tempo real",
+      "url": "https://maninews.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://maninews.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#e50914',
+                    secondary: '#dc2626'
+                },
+                fontFamily: {
+                    'inter': ['Inter', 'sans-serif']
+                }
+            }
+        }
+    };
+    </script>
+</head>
+<body class="font-inter bg-gray-50 text-gray-900">
+    <!-- @COMPONENT: Header [Fixed navigation with floating menu design] -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg border-b border-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-newspaper text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold text-primary">Mani News</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#home" class="text-primary font-medium border-b-2 border-primary pb-1" data-nav="home">Início</a>
+                    <a href="#categories" class="text-gray-600 hover:text-primary transition-colors" data-nav="categories">Categorias</a>
+                    <a href="#search" class="text-gray-600 hover:text-primary transition-colors" data-nav="search">Buscar</a>
+                    <a href="#profile" class="text-gray-600 hover:text-primary transition-colors" data-nav="profile">Perfil</a>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 text-gray-600" data-event="click:toggleMobileMenu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div class="md:hidden bg-white border-t border-gray-100 hidden" data-element="mobile-menu">
+            <div class="container mx-auto px-4 py-4 space-y-2">
+                <a href="#home" class="block py-2 text-primary font-medium" data-nav="home">
+                    <i class="fas fa-home w-5 mr-2"></i>Início
+                </a>
+                <a href="#categories" class="block py-2 text-gray-600" data-nav="categories">
+                    <i class="fas fa-th-large w-5 mr-2"></i>Categorias
+                </a>
+                <a href="#search" class="block py-2 text-gray-600" data-nav="search">
+                    <i class="fas fa-search w-5 mr-2"></i>Buscar
+                </a>
+                <a href="#profile" class="block py-2 text-gray-600" data-nav="profile">
+                    <i class="fas fa-user w-5 mr-2"></i>Perfil
+                </a>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+    
+    <!-- Main Content -->
+    <main class="pt-16">
+        <!-- @COMPONENT: HomePage [Main news listing page] -->
+        <div id="home-page" class="page-content">
+            <!-- Hero Section -->
+            <section class="bg-gradient-to-r from-primary to-secondary py-8 mb-6">
+                <div class="container mx-auto px-4">
+                    <div class="text-center">
+                        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Últimas Notícias</h1>
+                        <p class="text-red-100 text-lg">Fique por dentro de tudo que acontece no mundo</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Search and Filters -->
+            <section class="container mx-auto px-4 mb-6">
+                <div class="flex flex-col md:flex-row gap-4 items-center">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 w-full md:max-w-md">
+                        <input type="text" placeholder="Buscar notícias..." 
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" 
+                               data-bind="searchQuery">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    
+                    <!-- Category Filters -->
+                    <div class="flex flex-wrap gap-2">
+                        <!-- @MAP: categories.map(category => ( -->
+                        <button class="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium hover:bg-secondary transition-colors" 
+                                data-mock="true" data-bind="selectedCategory === 'todas'" data-event="click:filterByCategory('todas')">
+                            Todas
+                        </button>
+                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-primary hover:text-white transition-colors" 
+                                data-mock="true" data-event="click:filterByCategory('politica')">
+                            Política
+                        </button>
+                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-primary hover:text-white transition-colors" 
+                                data-mock="true" data-event="click:filterByCategory('economia')">
+                            Economia
+                        </button>
+                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-primary hover:text-white transition-colors" 
+                                data-mock="true" data-event="click:filterByCategory('esportes')">
+                            Esportes
+                        </button>
+                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-primary hover:text-white transition-colors" 
+                                data-mock="true" data-event="click:filterByCategory('tecnologia')">
+                            Tecnologia
+                        </button>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- News Articles Grid -->
+            <section class="container mx-auto px-4 pb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- @MAP: articles.map(article => ( -->
+                    <!-- @COMPONENT: NewsCard [Individual news article card] -->
+                    
+                    <!-- Featured News Article 1 -->
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer" 
+                             data-mock="true" data-event="click:openArticle('1')">
+                        <!-- Modern newsroom with journalists working on breaking news story -->
+                        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="Breaking news coverage" 
+                             class="w-full h-48 object-cover" 
+                             loading="lazy" 
+                             data-mock-image="true">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-primary text-white text-xs font-medium rounded-full" data-bind="article.category">
+                                    Política
+                                </span>
+                                <span class="text-gray-500 text-sm" data-bind="article.publishedAt">
+                                    2 horas atrás
+                                </span>
+                            </div>
+                            <h2 class="text-xl font-bold mb-3 line-clamp-2 hover:text-primary transition-colors" data-bind="article.title">
+                                Congresso Nacional aprova nova legislação sobre tecnologia digital
+                            </h2>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3" data-bind="article.summary">
+                                A nova lei estabelece diretrizes importantes para o uso responsável da tecnologia digital no país, impactando empresas e usuários...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-bind="article.views">1,234 visualizações</span>
+                                </div>
+                                <button class="flex items-center space-x-2 text-green-600 hover:text-green-700 text-sm font-medium" 
+                                        data-event="click:shareToWhatsApp(article.url, article.title)">
+                                    <i class="fab fa-whatsapp"></i>
+                                    <span>Compartilhar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- News Article 2 -->
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer" 
+                             data-mock="true" data-event="click:openArticle('2')">
+                        <!-- Financial market charts and analysis on computer screens -->
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="Financial market analysis" 
+                             class="w-full h-48 object-cover" 
+                             loading="lazy" 
+                             data-mock-image="true">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-blue-500 text-white text-xs font-medium rounded-full" data-mock="true">
+                                    Economia
+                                </span>
+                                <span class="text-gray-500 text-sm" data-mock="true">
+                                    4 horas atrás
+                                </span>
+                            </div>
+                            <h2 class="text-xl font-bold mb-3 line-clamp-2 hover:text-primary transition-colors" data-mock="true">
+                                Mercado financeiro registra alta histórica no primeiro trimestre
+                            </h2>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3" data-mock="true">
+                                Os principais índices da bolsa de valores atingiram recordes históricos, refletindo o otimismo dos investidores...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-mock="true">892 visualizações</span>
+                                </div>
+                                <button class="flex items-center space-x-2 text-green-600 hover:text-green-700 text-sm font-medium" 
+                                        data-event="click:shareToWhatsApp(article.url, article.title)">
+                                    <i class="fab fa-whatsapp"></i>
+                                    <span>Compartilhar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- News Article 3 -->
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer" 
+                             data-mock="true" data-event="click:openArticle('3')">
+                        <!-- Soccer players celebrating a goal in stadium with crowd -->
+                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="Football match celebration" 
+                             class="w-full h-48 object-cover" 
+                             loading="lazy" 
+                             data-mock-image="true">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-green-500 text-white text-xs font-medium rounded-full" data-mock="true">
+                                    Esportes
+                                </span>
+                                <span class="text-gray-500 text-sm" data-mock="true">
+                                    6 horas atrás
+                                </span>
+                            </div>
+                            <h2 class="text-xl font-bold mb-3 line-clamp-2 hover:text-primary transition-colors" data-mock="true">
+                                Campeonato nacional define semifinalistas em partidas emocionantes
+                            </h2>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3" data-mock="true">
+                                As quartas de final do campeonato nacional foram marcadas por jogos disputados e resultados surpreendentes...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-mock="true">2,156 visualizações</span>
+                                </div>
+                                <button class="flex items-center space-x-2 text-green-600 hover:text-green-700 text-sm font-medium" 
+                                        data-event="click:shareToWhatsApp(article.url, article.title)">
+                                    <i class="fab fa-whatsapp"></i>
+                                    <span>Compartilhar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- News Article 4 -->
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer" 
+                             data-mock="true" data-event="click:openArticle('4')">
+                        <!-- Advanced artificial intelligence and technology concept with neural networks -->
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="Artificial intelligence technology" 
+                             class="w-full h-48 object-cover" 
+                             loading="lazy" 
+                             data-mock-image="true">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-purple-500 text-white text-xs font-medium rounded-full" data-mock="true">
+                                    Tecnologia
+                                </span>
+                                <span class="text-gray-500 text-sm" data-mock="true">
+                                    8 horas atrás
+                                </span>
+                            </div>
+                            <h2 class="text-xl font-bold mb-3 line-clamp-2 hover:text-primary transition-colors" data-mock="true">
+                                Inteligência artificial revoluciona setor de saúde com novo sistema
+                            </h2>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3" data-mock="true">
+                                Nova tecnologia de IA promete acelerar diagnósticos médicos e melhorar tratamentos personalizados para pacientes...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-mock="true">1,567 visualizações</span>
+                                </div>
+                                <button class="flex items-center space-x-2 text-green-600 hover:text-green-700 text-sm font-medium" 
+                                        data-event="click:shareToWhatsApp(article.url, article.title)">
+                                    <i class="fab fa-whatsapp"></i>
+                                    <span>Compartilhar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- News Article 5 -->
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer" 
+                             data-mock="true" data-event="click:openArticle('5')">
+                        <!-- Climate change and environmental protection with renewable energy -->
+                        <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="Environmental sustainability" 
+                             class="w-full h-48 object-cover" 
+                             loading="lazy" 
+                             data-mock-image="true">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-full" data-mock="true">
+                                    Ambiente
+                                </span>
+                                <span class="text-gray-500 text-sm" data-mock="true">
+                                    1 dia atrás
+                                </span>
+                            </div>
+                            <h2 class="text-xl font-bold mb-3 line-clamp-2 hover:text-primary transition-colors" data-mock="true">
+                                Programa nacional de energia renovável bate recorde de investimentos
+                            </h2>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3" data-mock="true">
+                                O país registrou o maior volume de investimentos em energia limpa da história, com foco em projetos solares e eólicos...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-mock="true">934 visualizações</span>
+                                </div>
+                                <button class="flex items-center space-x-2 text-green-600 hover:text-green-700 text-sm font-medium" 
+                                        data-event="click:shareToWhatsApp(article.url, article.title)">
+                                    <i class="fab fa-whatsapp"></i>
+                                    <span>Compartilhar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- News Article 6 -->
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer" 
+                             data-mock="true" data-event="click:openArticle('6')">
+                        <!-- Modern educational technology in classroom with students using tablets -->
+                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="Digital education technology" 
+                             class="w-full h-48 object-cover" 
+                             loading="lazy" 
+                             data-mock-image="true">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-yellow-500 text-white text-xs font-medium rounded-full" data-mock="true">
+                                    Educação
+                                </span>
+                                <span class="text-gray-500 text-sm" data-mock="true">
+                                    1 dia atrás
+                                </span>
+                            </div>
+                            <h2 class="text-xl font-bold mb-3 line-clamp-2 hover:text-primary transition-colors" data-mock="true">
+                                Ministério da Educação anuncia digitalização completa do ensino público
+                            </h2>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3" data-mock="true">
+                                Nova iniciativa prevê equipamentos digitais para todas as escolas públicas do país até 2025, transformando a educação...
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span data-mock="true">1,823 visualizações</span>
+                                </div>
+                                <button class="flex items-center space-x-2 text-green-600 hover:text-green-700 text-sm font-medium" 
+                                        data-event="click:shareToWhatsApp(article.url, article.title)">
+                                    <i class="fab fa-whatsapp"></i>
+                                    <span>Compartilhar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- @END_MAP )) -->
+                </div>
+                
+                <!-- Load More Button -->
+                <!-- @STATE: hasMoreArticles:boolean = true -->
+                <div class="text-center mt-8">
+                    <button class="px-8 py-3 bg-primary text-white font-medium rounded-lg hover:bg-secondary transition-colors" 
+                            data-event="click:loadMoreArticles" data-implementation="Should load more articles from API">
+                        Carregar mais notícias
+                    </button>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: HomePage -->
+        
+        <!-- @COMPONENT: ArticlePage [Individual news article page] -->
+        <div id="article-page" class="page-content hidden" data-bind="selectedArticle">
+            <article class="container mx-auto px-4 py-8 max-w-4xl">
+                <!-- Article Header -->
+                <header class="mb-8">
+                    <div class="flex items-center gap-2 mb-4">
+                        <button class="flex items-center text-gray-600 hover:text-primary" data-event="click:goBack">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            <span>Voltar</span>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-4 py-2 bg-primary text-white text-sm font-medium rounded-full" data-bind="article.category" data-mock="true">
+                            Política
+                        </span>
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <i class="fas fa-calendar mr-2"></i>
+                            <span data-bind="article.publishedDate" data-mock="true">15 de março de 2024</span>
+                        </div>
+                    </div>
+                    
+                    <h1 class="text-3xl md:text-4xl font-bold mb-4" data-bind="article.title" data-mock="true">
+                        Congresso Nacional aprova nova legislação sobre tecnologia digital
+                    </h1>
+                    
+                    <p class="text-xl text-gray-600 mb-6" data-bind="article.subtitle" data-mock="true">
+                        A nova lei estabelece diretrizes importantes para o uso responsável da tecnologia digital no país, impactando empresas e usuários de forma significativa.
+                    </p>
+                    
+                    <div class="flex items-center justify-between flex-wrap gap-4">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-user-circle mr-2"></i>
+                            <span data-bind="article.author" data-mock="true">Por Maria Silva</span>
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-eye mr-1"></i>
+                            <span data-bind="article.views" data-mock="true">1,234 visualizações</span>
+                        </div>
+                        
+                        <!-- Social Share Buttons -->
+                        <div class="flex items-center gap-3">
+                            <button class="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm" 
+                                    data-event="click:shareToWhatsApp(article.url, article.title)">
+                                <i class="fab fa-whatsapp mr-2"></i>
+                                WhatsApp
+                            </button>
+                            <button class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm" 
+                                    data-event="click:shareToFacebook(article.url)">
+                                <i class="fab fa-facebook-f mr-2"></i>
+                                Facebook
+                            </button>
+                            <button class="flex items-center px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors text-sm" 
+                                    data-event="click:shareToTwitter(article.url, article.title)">
+                                <i class="fab fa-twitter mr-2"></i>
+                                Twitter
+                            </button>
+                            <button class="p-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 transition-colors" 
+                                    data-event="click:copyLink(article.url)">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+                
+                <!-- Featured Image -->
+                <figure class="mb-8">
+                    <!-- Modern newsroom with journalists working on breaking news story -->
+                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&h=600" 
+                         alt="Breaking news coverage" 
+                         class="w-full rounded-xl shadow-lg" 
+                         data-bind="article.featuredImage" 
+                         data-mock-image="true">
+                    <figcaption class="text-sm text-gray-600 mt-2 text-center" data-bind="article.imageCaption" data-mock="true">
+                        Sessão extraordinária do Congresso Nacional para votação da nova legislação digital
+                    </figcaption>
+                </figure>
+                
+                <!-- Article Content -->
+                <div class="prose prose-lg max-w-none" data-bind="article.content" data-mock="true">
+                    <p>A nova legislação sobre tecnologia digital foi aprovada por ampla maioria no Congresso Nacional, marcando um momento histórico para a regulamentação do setor tecnológico no país. A lei, que tramitava há mais de dois anos, estabelece diretrizes claras para a proteção de dados, segurança cibernética e direitos digitais dos cidadãos.</p>
+                    
+                    <h2>Principais pontos da nova legislação</h2>
+                    
+                    <p>Entre os principais aspectos da nova lei, destacam-se:</p>
+                    
+                    <ul>
+                        <li>Fortalecimento da proteção de dados pessoais</li>
+                        <li>Regulamentação das plataformas digitais</li>
+                        <li>Criação de mecanismos de segurança cibernética</li>
+                        <li>Estabelecimento de direitos digitais fundamentais</li>
+                    </ul>
+                    
+                    <p>O relator do projeto, deputado João Santos, destacou que "esta lei representa um marco na modernização do marco legal brasileiro, colocando o país em sintonia com as melhores práticas internacionais de governança digital".</p>
+                    
+                    <h2>Impactos para empresas e cidadãos</h2>
+                    
+                    <p>A nova legislação terá impactos significativos tanto para empresas do setor tecnológico quanto para os cidadãos brasileiros. As empresas terão um prazo de 18 meses para se adequar às novas regras, enquanto os cidadãos se beneficiarão de maior proteção e transparência no uso de suas informações pessoais.</p>
+                    
+                    <blockquote>
+                        <p>"Esta lei marca uma nova era na relação entre tecnologia e sociedade no Brasil, garantindo que o desenvolvimento tecnológico ocorra de forma responsável e sustentável."</p>
+                        <cite>- Ministra da Ciência e Tecnologia, Dra. Ana Costa</cite>
+                    </blockquote>
+                    
+                    <p>A implementação da nova legislação será acompanhada de perto por órgãos reguladores e pela sociedade civil, garantindo que os objetivos de proteção e desenvolvimento tecnológico sejam alcançados de forma equilibrada.</p>
+                </div>
+                
+                <!-- Article Tags -->
+                <div class="border-t border-gray-200 pt-6 mt-8">
+                    <h3 class="text-lg font-semibold mb-4">Tags relacionadas</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <!-- @MAP: article.tags.map(tag => ( -->
+                        <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors" 
+                                data-mock="true" data-event="click:filterByTag('congresso')">
+                            #congresso
+                        </button>
+                        <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors" 
+                                data-mock="true" data-event="click:filterByTag('tecnologia')">
+                            #tecnologia
+                        </button>
+                        <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors" 
+                                data-mock="true" data-event="click:filterByTag('legislacao')">
+                            #legislação
+                        </button>
+                        <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors" 
+                                data-mock="true" data-event="click:filterByTag('digital')">
+                            #digital
+                        </button>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+                
+                <!-- Related Articles -->
+                <section class="border-t border-gray-200 pt-8 mt-8">
+                    <h3 class="text-2xl font-bold mb-6">Notícias relacionadas</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- @MAP: relatedArticles.map(article => ( -->
+                        <article class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" 
+                                 data-mock="true" data-event="click:openArticle(article.id)">
+                            <!-- Technology innovation in government sector -->
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                                 alt="Government technology" 
+                                 class="w-full h-32 object-cover" 
+                                 loading="lazy" 
+                                 data-mock-image="true">
+                            <div class="p-4">
+                                <span class="px-2 py-1 bg-primary text-white text-xs rounded-full" data-mock="true">Política</span>
+                                <h4 class="font-semibold mt-2 mb-1 text-sm line-clamp-2" data-mock="true">
+                                    Governo anuncia plataforma digital única para serviços públicos
+                                </h4>
+                                <p class="text-xs text-gray-600" data-mock="true">3 horas atrás</p>
+                            </div>
+                        </article>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </section>
+            </article>
+        </div>
+        <!-- @END_COMPONENT: ArticlePage -->
+    </main>
+    
+    <!-- PWA Install Prompt -->
+    <div id="install-prompt" class="fixed bottom-4 left-4 right-4 bg-white rounded-lg shadow-xl border border-gray-200 p-4 hidden" data-element="install-prompt">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-mobile-alt text-white"></i>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-sm">Instalar Mani News</h4>
+                    <p class="text-xs text-gray-600">Acesse rapidamente suas notícias</p>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button class="px-3 py-1 text-xs text-gray-600 hover:text-gray-800" data-event="click:dismissInstallPrompt">
+                    Agora não
+                </button>
+                <button class="px-3 py-1 bg-primary text-white text-xs rounded hover:bg-secondary" data-event="click:installPWA">
+                    Instalar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PWA Manifest -->
+    <script type="application/json" id="manifest-data">
+    {
+        "name": "Mani News - Notícias em Tempo Real",
+        "short_name": "Mani News",
+        "description": "Acompanhe as últimas notícias em tempo real",
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": "#ffffff",
+        "theme_color": "#e50914",
+        "orientation": "portrait-primary",
+        "icons": [
+            {
+                "src": "/icon-192.png",
+                "sizes": "192x192",
+                "type": "image/png"
+            },
+            {
+                "src": "/icon-512.png",
+                "sizes": "512x512",
+                "type": "image/png"
+            }
+        ],
+        "categories": ["news", "lifestyle"],
+        "lang": "pt-BR"
+    }
+    </script>
+    
+    <!-- JavaScript for Basic Interactions -->
+    <script>
+    (function() {
+        'use strict';
+        
+        // Navigation state management
+        const pages = {
+            'home': document.getElementById('home-page'),
+            'article': document.getElementById('article-page')
+        };
+        
+        let currentPage = 'home';
+        
+        // Show specific page
+        function showPage(pageId) {
+            Object.keys(pages).forEach(key => {
+                if (pages[key]) {
+                    pages[key].classList.add('hidden');
+                }
+            });
+            
+            if (pages[pageId]) {
+                pages[pageId].classList.remove('hidden');
+                currentPage = pageId;
+            }
+        }
+        
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('[data-element="mobile-menu"]');
+            if (mobileMenu) {
+                mobileMenu.classList.toggle('hidden');
+            }
+        }
+        
+        // WhatsApp sharing functionality
+        function shareToWhatsApp(url, title) {
+            const text = encodeURIComponent(`${title} - ${url}`);
+            const whatsappUrl = `https://wa.me/?text=${text}`;
+            
+            // Check if Web Share API is available
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: url
+                }).catch(console.error);
+            } else {
+                window.open(whatsappUrl, '_blank');
+            }
+        }
+        
+        // Open article page
+        function openArticle(articleId) {
+            // TODO: Load article data from API
+            showPage('article');
+            window.scrollTo(0, 0);
+        }
+        
+        // Go back to previous page
+        function goBack() {
+            showPage('home');
+        }
+        
+        // PWA Installation
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install prompt
+            const installPrompt = document.getElementById('install-prompt');
+            if (installPrompt) {
+                installPrompt.classList.remove('hidden');
+            }
+        });
+        
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    dismissInstallPrompt();
+                });
+            }
+        }
+        
+        function dismissInstallPrompt() {
+            const installPrompt = document.getElementById('install-prompt');
+            if (installPrompt) {
+                installPrompt.classList.add('hidden');
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('click', function(e) {
+            const target = e.target.closest('[data-event]');
+            if (!target) return;
+            
+            const eventAttr = target.getAttribute('data-event');
+            const [eventType, handlerName] = eventAttr.split(':');
+            
+            if (eventType === 'click') {
+                switch (handlerName) {
+                    case 'toggleMobileMenu':
+                        toggleMobileMenu();
+                        break;
+                    case 'goBack':
+                        goBack();
+                        break;
+                    case 'installPWA':
+                        installPWA();
+                        break;
+                    case 'dismissInstallPrompt':
+                        dismissInstallPrompt();
+                        break;
+                    default:
+                        if (handlerName.startsWith('openArticle(')) {
+                            const articleId = handlerName.match(/\('(.+)'\)/)?.[1];
+                            if (articleId) openArticle(articleId);
+                        } else if (handlerName.startsWith('shareToWhatsApp(')) {
+                            // TODO: Extract actual article URL and title
+                            shareToWhatsApp(window.location.href, 'Confira esta notícia interessante');
+                        }
+                        break;
+                }
+            }
+        });
+        
+        // Navigation link handlers
+        document.addEventListener('click', function(e) {
+            const navLink = e.target.closest('[data-nav]');
+            if (!navLink) return;
+            
+            e.preventDefault();
+            
+            // Update active nav state
+            document.querySelectorAll('[data-nav]').forEach(link => {
+                link.classList.remove('text-primary', 'font-medium', 'border-b-2', 'border-primary', 'pb-1');
+                link.classList.add('text-gray-600');
+            });
+            
+            navLink.classList.remove('text-gray-600');
+            navLink.classList.add('text-primary', 'font-medium');
+            
+            if (!navLink.classList.contains('block')) { // Desktop nav
+                navLink.classList.add('border-b-2', 'border-primary', 'pb-1');
+            }
+            
+            // Handle navigation
+            const navType = navLink.getAttribute('data-nav');
+            if (navType === 'home') {
+                showPage('home');
+            }
+            
+            // Hide mobile menu if open
+            const mobileMenu = document.querySelector('[data-element="mobile-menu"]');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+        
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // TODO: Register service worker for offline caching
+                // navigator.serviceWorker.register('/sw.js')
+                console.log('Service Worker support detected');
+            });
+        }
+        
+        // Initialize app
+        showPage('home');
+        
+        // Lazy loading for images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.src; // Trigger actual loading
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+        
+    })();
+    </script>
+    
+    <!-- CSS for improved styling -->
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .prose {
+            color: #374151;
+            line-height: 1.7;
+        }
+        
+        .prose h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .prose ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .prose li {
+            margin: 0.5rem 0;
+        }
+        
+        .prose blockquote {
+            border-left: 4px solid #e50914;
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+            background-color: #f9fafb;
+            padding: 1rem 1rem 1rem 2rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .prose blockquote p {
+            font-style: italic;
+            margin: 0 0 0.5rem 0;
+            color: #4b5563;
+        }
+        
+        .prose blockquote cite {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 600;
+        }
+        
+        /* PWA specific styles */
+        @media (display-mode: standalone) {
+            body {
+                user-select: none;
+            }
+        }
+        
+        /* Loading animations */
+        .page-content {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body>
+</html>

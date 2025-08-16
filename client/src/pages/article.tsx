@@ -93,8 +93,12 @@ export default function Article() {
         articleData={{
           title: article.title,
           author: article.author,
-          publishedTime: article.publishedAt?.toISOString() || new Date().toISOString(),
-          modifiedTime: article.updatedAt?.toISOString() || new Date().toISOString(),
+          publishedTime: typeof article.publishedAt === 'string' 
+            ? new Date(article.publishedAt).toISOString() 
+            : article.publishedAt?.toISOString() || new Date().toISOString(),
+          modifiedTime: typeof article.updatedAt === 'string' 
+            ? new Date(article.updatedAt).toISOString() 
+            : article.updatedAt?.toISOString() || new Date().toISOString(),
           section: article.category.name,
           tags: article.tags || [],
         }}

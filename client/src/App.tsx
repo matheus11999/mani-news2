@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,10 +12,17 @@ import Categories from "@/pages/categories";
 import Trending from "@/pages/trending";
 import Search from "@/pages/search";
 import NotFound from "@/pages/not-found";
+import AdminLogin from "@/pages/admin/login";
+import AdminDashboard from "@/pages/admin/dashboard";
 
 function Router() {
   return (
     <Switch>
+      {/* Admin routes */}
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin" component={AdminDashboard} />
+      
+      {/* Public routes */}
       <Route path="/" component={Home} />
       <Route path="/article/:slug" component={Article} />
       <Route path="/categories" component={Categories} />
@@ -28,18 +35,25 @@ function Router() {
 }
 
 function App() {
+  const [location] = useLocation();
+  const isAdminRoute = location.startsWith("/admin");
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Header />
-          <main className="pt-14 pb-20 md:pb-4 md:pl-20">
-            <Router />
-          </main>
-          <BottomNavigation />
-          <InstallPrompt />
-          <Toaster />
-        </div>
+        {isAdminRoute ? (
+          <Router />
+        ) : (
+          <div className="min-h-screen bg-gray-50">
+            <Header />
+            <main className="pt-14 pb-20 md:pb-4 md:pl-20">
+              <Router />
+            </main>
+            <BottomNavigation />
+            <InstallPrompt />
+          </div>
+        )}
+        <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
   );

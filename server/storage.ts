@@ -1,254 +1,437 @@
-import { type User, type InsertUser, type Article, type InsertArticle, type Category, type InsertCategory, type ArticleWithCategory } from "@shared/schema";
-import { randomUUID } from "crypto";
+import { 
+  type User, 
+  type InsertUser, 
+  type Article, 
+  type InsertArticle, 
+  type Category, 
+  type InsertCategory, 
+  type ArticleWithCategory,
+  type SiteConfig,
+  type InsertSiteConfig,
+  users,
+  categories,
+  articles,
+  siteConfig
+} from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, sql, ilike, and } from "drizzle-orm";
+import bcrypt from "bcryptjs";
 
 export interface IStorage {
+  // Users
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: string, user: Partial<InsertUser>): Promise<User | undefined>;
+  deleteUser(id: string): Promise<boolean>;
   
+  // Categories
   getCategories(): Promise<Category[]>;
+  getCategoryById(id: string): Promise<Category | undefined>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
   createCategory(category: InsertCategory): Promise<Category>;
+  updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category | undefined>;
+  deleteCategory(id: string): Promise<boolean>;
   
+  // Articles
   getArticles(limit?: number, offset?: number): Promise<ArticleWithCategory[]>;
   getArticleById(id: string): Promise<ArticleWithCategory | undefined>;
   getArticleBySlug(slug: string): Promise<ArticleWithCategory | undefined>;
   getArticlesByCategory(categoryId: string, limit?: number): Promise<ArticleWithCategory[]>;
   searchArticles(query: string, limit?: number): Promise<ArticleWithCategory[]>;
   createArticle(article: InsertArticle): Promise<Article>;
+  updateArticle(id: string, article: Partial<InsertArticle>): Promise<Article | undefined>;
+  deleteArticle(id: string): Promise<boolean>;
   updateArticleViews(id: string): Promise<void>;
   getMostViewedArticles(limit?: number): Promise<ArticleWithCategory[]>;
+  
+  // Site Config
+  getSiteConfig(): Promise<SiteConfig | undefined>;
+  updateSiteConfig(config: Partial<InsertSiteConfig>): Promise<SiteConfig>;
+  
+  // Auth helpers
+  hashPassword(password: string): Promise<string>;
+  verifyPassword(password: string, hash: string): Promise<boolean>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-  private categories: Map<string, Category>;
-  private articles: Map<string, Article>;
-
+export class PostgresStorage implements IStorage {
   constructor() {
-    this.users = new Map();
-    this.categories = new Map();
-    this.articles = new Map();
-    
-    // Initialize with sample categories
-    this.initializeCategories();
-    this.initializeArticles();
+    // Initialize default data if needed
+    this.initializeDefaults();
   }
 
-  private initializeCategories() {
-    const categories: Category[] = [
-      { id: "1", name: "Política", slug: "politica", color: "#e50914" },
-      { id: "2", name: "Economia", slug: "economia", color: "#3b82f6" },
-      { id: "3", name: "Esportes", slug: "esportes", color: "#10b981" },
-      { id: "4", name: "Tecnologia", slug: "tecnologia", color: "#8b5cf6" },
-      { id: "5", name: "Ambiente", slug: "ambiente", color: "#059669" },
-      { id: "6", name: "Educação", slug: "educacao", color: "#f59e0b" },
-    ];
-    
-    categories.forEach(category => this.categories.set(category.id, category));
+  private async initializeDefaults() {
+    try {
+      // Check if site config exists, if not create default
+      const config = await this.getSiteConfig();
+      if (!config) {
+        await this.updateSiteConfig({});
+      }
+    } catch (error) {
+      console.error('Error initializing defaults:', error);
+    }
   }
 
-  private initializeArticles() {
-    const articles: Article[] = [
-      {
-        id: "1",
-        title: "Congresso Nacional aprova nova legislação sobre tecnologia digital",
-        subtitle: "A nova lei estabelece diretrizes importantes para o uso responsável da tecnologia digital no país",
-        slug: "congresso-aprova-legislacao-tecnologia-digital",
-        summary: "A nova lei estabelece diretrizes importantes para o uso responsável da tecnologia digital no país, impactando empresas e usuários...",
-        content: "<p>A nova legislação sobre tecnologia digital foi aprovada por ampla maioria no Congresso Nacional, marcando um momento histórico para a regulamentação do setor tecnológico no país.</p><h2>Principais pontos da nova legislação</h2><p>Entre os principais aspectos da nova lei, destacam-se: fortalecimento da proteção de dados pessoais, regulamentação das plataformas digitais, criação de mecanismos de segurança cibernética e estabelecimento de direitos digitais fundamentais.</p>",
-        featuredImage: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600",
-        imageCaption: "Sessão extraordinária do Congresso Nacional para votação da nova legislação digital",
-        categoryId: "1",
-        author: "Maria Silva",
-        views: 1234,
-        published: true,
-        publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        tags: ["congresso", "tecnologia", "legislacao", "digital"],
-        metaDescription: "Congresso Nacional aprova nova legislação sobre tecnologia digital estabelecendo diretrizes para uso responsável",
-        metaKeywords: "congresso, tecnologia, legislação, digital, política",
-      },
-      {
-        id: "2",
-        title: "Mercado financeiro registra alta histórica no primeiro trimestre",
-        subtitle: "Os principais índices da bolsa de valores atingiram recordes históricos",
-        slug: "mercado-financeiro-alta-historica-primeiro-trimestre",
-        summary: "Os principais índices da bolsa de valores atingiram recordes históricos, refletindo o otimismo dos investidores...",
-        content: "<p>O mercado financeiro brasileiro encerrou o primeiro trimestre com resultados excepcionais, registrando a maior alta histórica em seus principais índices.</p>",
-        featuredImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600",
-        imageCaption: "Análise do mercado financeiro mostra crescimento histórico",
-        categoryId: "2",
-        author: "João Santos",
-        views: 892,
-        published: true,
-        publishedAt: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        tags: ["economia", "mercado", "bolsa", "investimentos"],
-        metaDescription: "Mercado financeiro brasileiro registra alta histórica no primeiro trimestre de 2024",
-        metaKeywords: "economia, mercado financeiro, bolsa, investimentos",
-      },
-      {
-        id: "3",
-        title: "Campeonato nacional define semifinalistas em partidas emocionantes",
-        subtitle: "As quartas de final foram marcadas por jogos disputados e resultados surpreendentes",
-        slug: "campeonato-nacional-semifinalistas-partidas-emocionantes",
-        summary: "As quartas de final do campeonato nacional foram marcadas por jogos disputados e resultados surpreendentes...",
-        content: "<p>O campeonato nacional de futebol viveu uma das rodadas mais emocionantes de sua história nas quartas de final.</p>",
-        featuredImage: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600",
-        imageCaption: "Jogadores celebram classificação às semifinais",
-        categoryId: "3",
-        author: "Carlos Ferreira",
-        views: 2156,
-        published: true,
-        publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        tags: ["futebol", "campeonato", "esportes", "semifinal"],
-        metaDescription: "Campeonato nacional define semifinalistas em quartas de final emocionantes",
-        metaKeywords: "futebol, campeonato, esportes, semifinal",
-      },
-    ];
-    
-    articles.forEach(article => this.articles.set(article.id, article));
+  // Auth helpers
+  async hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, 12);
   }
 
+  async verifyPassword(password: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(password, hash);
+  }
+
+  // Users
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    try {
+      const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+      return result[0];
+    } catch (error) {
+      console.error('Error getting user:', error);
+      return undefined;
+    }
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    try {
+      const result = await db.select().from(users).where(eq(users.username, username)).limit(1);
+      return result[0];
+    } catch (error) {
+      console.error('Error getting user by username:', error);
+      return undefined;
+    }
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    try {
+      const result = await db.select().from(users).where(eq(users.email, email)).limit(1);
+      return result[0];
+    } catch (error) {
+      console.error('Error getting user by email:', error);
+      return undefined;
+    }
   }
 
+  async createUser(user: InsertUser): Promise<User> {
+    try {
+      const hashedPassword = await this.hashPassword(user.password);
+      const result = await db.insert(users).values({
+        ...user,
+        password: hashedPassword,
+      }).returning();
+      return result[0];
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
+  }
+
+  async updateUser(id: string, user: Partial<InsertUser>): Promise<User | undefined> {
+    try {
+      const updateData = { ...user };
+      if (updateData.password) {
+        updateData.password = await this.hashPassword(updateData.password);
+      }
+      updateData.updatedAt = new Date();
+      
+      const result = await db.update(users)
+        .set(updateData)
+        .where(eq(users.id, id))
+        .returning();
+      return result[0];
+    } catch (error) {
+      console.error('Error updating user:', error);
+      return undefined;
+    }
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    try {
+      await db.delete(users).where(eq(users.id, id));
+      return true;
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return false;
+    }
+  }
+
+  // Categories
   async getCategories(): Promise<Category[]> {
-    return Array.from(this.categories.values());
+    try {
+      return await db.select().from(categories).orderBy(categories.name);
+    } catch (error) {
+      console.error('Error getting categories:', error);
+      return [];
+    }
+  }
+
+  async getCategoryById(id: string): Promise<Category | undefined> {
+    try {
+      const result = await db.select().from(categories).where(eq(categories.id, id)).limit(1);
+      return result[0];
+    } catch (error) {
+      console.error('Error getting category by id:', error);
+      return undefined;
+    }
   }
 
   async getCategoryBySlug(slug: string): Promise<Category | undefined> {
-    return Array.from(this.categories.values()).find(cat => cat.slug === slug);
+    try {
+      const result = await db.select().from(categories).where(eq(categories.slug, slug)).limit(1);
+      return result[0];
+    } catch (error) {
+      console.error('Error getting category by slug:', error);
+      return undefined;
+    }
   }
 
   async createCategory(category: InsertCategory): Promise<Category> {
-    const id = randomUUID();
-    const newCategory: Category = { ...category, id, color: category.color || "#6b7280" };
-    this.categories.set(id, newCategory);
-    return newCategory;
+    try {
+      const result = await db.insert(categories).values(category).returning();
+      return result[0];
+    } catch (error) {
+      console.error('Error creating category:', error);
+      throw error;
+    }
   }
 
+  async updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category | undefined> {
+    try {
+      const result = await db.update(categories)
+        .set(category)
+        .where(eq(categories.id, id))
+        .returning();
+      return result[0];
+    } catch (error) {
+      console.error('Error updating category:', error);
+      return undefined;
+    }
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    try {
+      // Check if there are articles using this category
+      const articlesWithCategory = await db.select({ id: articles.id })
+        .from(articles)
+        .where(eq(articles.categoryId, id))
+        .limit(1);
+      
+      if (articlesWithCategory.length > 0) {
+        throw new Error('Cannot delete category that has articles');
+      }
+      
+      await db.delete(categories).where(eq(categories.id, id));
+      return true;
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      return false;
+    }
+  }
+
+  // Articles
   async getArticles(limit = 20, offset = 0): Promise<ArticleWithCategory[]> {
-    const articles = Array.from(this.articles.values())
-      .filter(article => article.published)
-      .sort((a, b) => new Date(b.publishedAt!).getTime() - new Date(a.publishedAt!).getTime())
-      .slice(offset, offset + limit);
-    
-    return articles.map(article => ({
-      ...article,
-      category: this.categories.get(article.categoryId)!
-    }));
+    try {
+      const result = await db.select()
+        .from(articles)
+        .leftJoin(categories, eq(articles.categoryId, categories.id))
+        .where(eq(articles.published, true))
+        .orderBy(desc(articles.publishedAt))
+        .limit(limit)
+        .offset(offset);
+
+      return result.map(row => ({
+        ...row.articles,
+        category: row.categories!
+      }));
+    } catch (error) {
+      console.error('Error getting articles:', error);
+      return [];
+    }
   }
 
   async getArticleById(id: string): Promise<ArticleWithCategory | undefined> {
-    const article = this.articles.get(id);
-    if (!article) return undefined;
-    
-    return {
-      ...article,
-      category: this.categories.get(article.categoryId)!
-    };
+    try {
+      const result = await db.select()
+        .from(articles)
+        .leftJoin(categories, eq(articles.categoryId, categories.id))
+        .where(eq(articles.id, id))
+        .limit(1);
+
+      if (result.length === 0) return undefined;
+      
+      return {
+        ...result[0].articles,
+        category: result[0].categories!
+      };
+    } catch (error) {
+      console.error('Error getting article by id:', error);
+      return undefined;
+    }
   }
 
   async getArticleBySlug(slug: string): Promise<ArticleWithCategory | undefined> {
-    const article = Array.from(this.articles.values()).find(a => a.slug === slug);
-    if (!article) return undefined;
-    
-    return {
-      ...article,
-      category: this.categories.get(article.categoryId)!
-    };
+    try {
+      const result = await db.select()
+        .from(articles)
+        .leftJoin(categories, eq(articles.categoryId, categories.id))
+        .where(eq(articles.slug, slug))
+        .limit(1);
+
+      if (result.length === 0) return undefined;
+      
+      return {
+        ...result[0].articles,
+        category: result[0].categories!
+      };
+    } catch (error) {
+      console.error('Error getting article by slug:', error);
+      return undefined;
+    }
   }
 
   async getArticlesByCategory(categoryId: string, limit = 10): Promise<ArticleWithCategory[]> {
-    const articles = Array.from(this.articles.values())
-      .filter(article => article.published && article.categoryId === categoryId)
-      .sort((a, b) => new Date(b.publishedAt!).getTime() - new Date(a.publishedAt!).getTime())
-      .slice(0, limit);
-    
-    return articles.map(article => ({
-      ...article,
-      category: this.categories.get(article.categoryId)!
-    }));
+    try {
+      const result = await db.select()
+        .from(articles)
+        .leftJoin(categories, eq(articles.categoryId, categories.id))
+        .where(and(eq(articles.categoryId, categoryId), eq(articles.published, true)))
+        .orderBy(desc(articles.publishedAt))
+        .limit(limit);
+
+      return result.map(row => ({
+        ...row.articles,
+        category: row.categories!
+      }));
+    } catch (error) {
+      console.error('Error getting articles by category:', error);
+      return [];
+    }
   }
 
   async searchArticles(query: string, limit = 10): Promise<ArticleWithCategory[]> {
-    const searchTerm = query.toLowerCase();
-    const articles = Array.from(this.articles.values())
-      .filter(article => 
-        article.published && 
-        (article.title.toLowerCase().includes(searchTerm) ||
-         article.summary.toLowerCase().includes(searchTerm) ||
-         article.content.toLowerCase().includes(searchTerm) ||
-         (article.tags || []).some(tag => tag.toLowerCase().includes(searchTerm)))
-      )
-      .sort((a, b) => new Date(b.publishedAt!).getTime() - new Date(a.publishedAt!).getTime())
-      .slice(0, limit);
-    
-    return articles.map(article => ({
-      ...article,
-      category: this.categories.get(article.categoryId)!
-    }));
+    try {
+      const result = await db.select()
+        .from(articles)
+        .leftJoin(categories, eq(articles.categoryId, categories.id))
+        .where(and(
+          eq(articles.published, true),
+          sql`(${articles.title} ILIKE ${'%' + query + '%'} OR ${articles.summary} ILIKE ${'%' + query + '%'} OR ${articles.content} ILIKE ${'%' + query + '%'})`
+        ))
+        .orderBy(desc(articles.publishedAt))
+        .limit(limit);
+
+      return result.map(row => ({
+        ...row.articles,
+        category: row.categories!
+      }));
+    } catch (error) {
+      console.error('Error searching articles:', error);
+      return [];
+    }
   }
 
   async createArticle(article: InsertArticle): Promise<Article> {
-    const id = randomUUID();
-    const newArticle: Article = { 
-      ...article, 
-      id,
-      views: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      subtitle: article.subtitle || null,
-      imageCaption: article.imageCaption || null,
-      tags: article.tags || [],
-      metaDescription: article.metaDescription || null,
-      metaKeywords: article.metaKeywords || null,
-      published: article.published ?? false,
-      publishedAt: article.publishedAt || new Date()
-    };
-    this.articles.set(id, newArticle);
-    return newArticle;
+    try {
+      const result = await db.insert(articles).values(article).returning();
+      return result[0];
+    } catch (error) {
+      console.error('Error creating article:', error);
+      throw error;
+    }
+  }
+
+  async updateArticle(id: string, article: Partial<InsertArticle>): Promise<Article | undefined> {
+    try {
+      const updateData = { ...article };
+      updateData.updatedAt = new Date();
+      
+      const result = await db.update(articles)
+        .set(updateData)
+        .where(eq(articles.id, id))
+        .returning();
+      return result[0];
+    } catch (error) {
+      console.error('Error updating article:', error);
+      return undefined;
+    }
+  }
+
+  async deleteArticle(id: string): Promise<boolean> {
+    try {
+      await db.delete(articles).where(eq(articles.id, id));
+      return true;
+    } catch (error) {
+      console.error('Error deleting article:', error);
+      return false;
+    }
   }
 
   async updateArticleViews(id: string): Promise<void> {
-    const article = this.articles.get(id);
-    if (article) {
-      article.views = (article.views || 0) + 1;
-      this.articles.set(id, article);
+    try {
+      await db.update(articles)
+        .set({ views: sql`${articles.views} + 1` })
+        .where(eq(articles.id, id));
+    } catch (error) {
+      console.error('Error updating article views:', error);
     }
   }
 
   async getMostViewedArticles(limit = 5): Promise<ArticleWithCategory[]> {
-    const articles = Array.from(this.articles.values())
-      .filter(article => article.published)
-      .sort((a, b) => (b.views || 0) - (a.views || 0))
-      .slice(0, limit);
-    
-    return articles.map(article => ({
-      ...article,
-      category: this.categories.get(article.categoryId)!
-    }));
+    try {
+      const result = await db.select()
+        .from(articles)
+        .leftJoin(categories, eq(articles.categoryId, categories.id))
+        .where(eq(articles.published, true))
+        .orderBy(desc(articles.views))
+        .limit(limit);
+
+      return result.map(row => ({
+        ...row.articles,
+        category: row.categories!
+      }));
+    } catch (error) {
+      console.error('Error getting most viewed articles:', error);
+      return [];
+    }
+  }
+
+  // Site Config
+  async getSiteConfig(): Promise<SiteConfig | undefined> {
+    try {
+      const result = await db.select().from(siteConfig).limit(1);
+      return result[0];
+    } catch (error) {
+      console.error('Error getting site config:', error);
+      return undefined;
+    }
+  }
+
+  async updateSiteConfig(config: Partial<InsertSiteConfig>): Promise<SiteConfig> {
+    try {
+      // Try to update first
+      const existing = await this.getSiteConfig();
+      
+      if (existing) {
+        const updateData = { ...config };
+        updateData.updatedAt = new Date();
+        
+        const result = await db.update(siteConfig)
+          .set(updateData)
+          .returning();
+        return result[0];
+      } else {
+        // Create new if doesn't exist
+        const result = await db.insert(siteConfig)
+          .values(config)
+          .returning();
+        return result[0];
+      }
+    } catch (error) {
+      console.error('Error updating site config:', error);
+      throw error;
+    }
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new PostgresStorage();

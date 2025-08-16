@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, integer, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, integer, boolean, json } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -7,6 +7,11 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  email: text("email").notNull().unique(),
+  role: text("role").notNull().default("user"), // "admin" or "user"
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const categories = pgTable("categories", {
@@ -63,3 +68,43 @@ export type InsertArticle = z.infer<typeof insertArticleSchema>;
 export type Article = typeof articles.$inferSelect;
 
 export type ArticleWithCategory = Article & { category: Category };
+
+// Site configuration table
+export const siteConfig = pgTable("site_config", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  siteName: text("site_name").notNull().default("Mani News"),
+  siteDescription: text("site_description").notNull().default("Notícias em tempo real"),
+  siteKeywords: text("site_keywords").default("notícias, tempo real, brasil"),
+  siteLogo: text("site_logo").default("/logo.png"),
+  favicon: text("favicon").default("/favicon.ico"),
+  primaryColor: text("primary_color").default("#e50914"),
+  secondaryColor: text("secondary_color").default("#dc2626"),
+  contactEmail: text("contact_email").default("contato@maninews.com"),
+  socialMedia: json("social_media").$type<{
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    youtube?: string;
+  }>().default({}),
+  analytics: json("analytics").$type<{
+    googleAnalyticsId?: string;
+    facebookPixelId?: string;
+  }>().default({}),
+  seo: json("seo").$type<{
+    metaTitle?: string;
+    metaDescription?: string;
+    ogImage?: string;
+    twitterCard?: string;
+  }>().default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertSiteConfigSchema = createInsertSchema(siteConfig).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertSiteConfig = z.infer<typeof insertSiteConfigSchema>;
+export type SiteConfig = typeof siteConfig.$inferSelect;
