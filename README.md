@@ -144,17 +144,52 @@ O schema completo está definido em `shared/schema.ts` usando Drizzle ORM.
 
 ## 🚀 Deploy
 
-### Produção
-```bash
-# Build
-npm run build
+### Deploy Automatizado na Sua Infraestrutura
 
-# Start
+1. **Clone o repositório na máquina de produção:**
+```bash
+git clone https://github.com/matheus11999/mani-news2.git
+cd mani-news2
+```
+
+2. **Configure a variável de ambiente do PostgreSQL:**
+```bash
+export DATABASE_URL="postgres://mani:260520jm@evoapi_maninews-postgres:5432/mani?sslmode=disable"
+export JWT_SECRET="your-super-secret-jwt-key"
+export NODE_ENV="production"
+export PORT="3000"
+```
+
+3. **Instale dependências e configure o banco:**
+```bash
+npm install
+npm run db:push    # Cria as tabelas no PostgreSQL
+npm run db:init    # Inicializa dados padrão
+```
+
+4. **Inicie a aplicação:**
+```bash
 npm start
 ```
 
-### Docker (Opcional)
-O projeto está preparado para funcionar com PostgreSQL em container Docker.
+### Deploy no Heroku (Opcional)
+```bash
+heroku create mani-news-app
+heroku addons:create heroku-postgresql:essential-0
+git push heroku main
+```
+
+### Deploy no EasyPanel
+O projeto está configurado para deploy automático no EasyPanel:
+- As variáveis de ambiente serão configuradas automaticamente
+- O PostgreSQL deve estar rodando no container `evoapi_maninews-postgres`
+- A aplicação estará disponível na porta 3000
+
+### Verificação Pós-Deploy
+1. Acesse a aplicação na URL configurada
+2. Vá para `/admin/register` para criar o primeiro usuário administrador
+3. Faça login em `/admin/login`
+4. Configure o site em `/admin/settings`
 
 ## 📱 PWA Features
 - **Manifest** configurado para instalação
