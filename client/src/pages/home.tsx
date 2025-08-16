@@ -49,13 +49,13 @@ export default function Home() {
           ) : articles.length > 0 ? (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {articles.slice(5).map((article) => (
+                {articles.map((article) => (
                   <NewsCard key={article.id} article={article} />
                 ))}  
               </div>
               
               {/* Load More Button */}
-              {articles.length > 5 && (
+              {articles.length >= 6 && (
                 <div className="text-center mt-8">
                   <Button 
                     className="px-8 py-3 bg-primary text-white font-medium hover:bg-secondary"
