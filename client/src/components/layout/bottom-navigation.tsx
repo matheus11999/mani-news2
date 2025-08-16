@@ -7,7 +7,7 @@ export default function BottomNavigation() {
 
   const navItems = [
     { name: "Início", href: "/", icon: Home },
-    { name: "Trending", href: "/trending", icon: TrendingUp },
+    { name: "Em Alta", href: "/em-alta", icon: TrendingUp },
     { name: "Categorias", href: "/categories", icon: Grid3X3 },
     { name: "Buscar", href: "/search", icon: Search },
   ];

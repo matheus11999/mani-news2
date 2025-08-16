@@ -72,7 +72,7 @@ export default function NewsCard({ article, compact = false }: NewsCardProps) {
             <div className="flex items-center text-gray-500 text-sm">
               <Eye className="h-4 w-4 mr-1" />
               <span data-testid="text-article-views">
-                {article.views || 0} visualizações
+                {(article.views || 0).toLocaleString()}
               </span>
             </div>
             

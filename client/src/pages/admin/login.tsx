@@ -145,18 +145,6 @@ export default function AdminLogin() {
           </CardContent>
         </Card>
 
-        <div className="text-center">
-          <p className="text-sm text-gray-600">
-            Primeiro acesso?{" "}
-            <Button 
-              variant="link" 
-              className="p-0 h-auto text-primary"
-              onClick={() => setLocation("/admin/register")}
-            >
-              Criar conta administrativa
-            </Button>
-          </p>
-        </div>
       </div>
     </div>
   );

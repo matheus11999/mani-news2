@@ -76,35 +76,49 @@ export default function InstallPrompt() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 bg-white rounded-lg shadow-xl border border-gray-200 p-4 z-50 max-w-sm mx-auto">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mr-3">
-            <Download className="text-white h-5 w-5" />
-          </div>
-          <div>
-            <h4 className="font-semibold text-sm">Instalar Mani News</h4>
-            <p className="text-xs text-gray-600">Acesse rapidamente suas notícias</p>
+    <div className="fixed bottom-4 left-4 right-4 bg-gradient-to-r from-primary to-secondary rounded-xl shadow-2xl p-5 z-50 max-w-md mx-auto border-2 border-white/20 backdrop-blur-sm">
+      <div className="flex items-start space-x-4">
+        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+          <Download className="text-white h-6 w-6" />
+        </div>
+        <div className="flex-1 text-white">
+          <h4 className="font-bold text-base mb-1">📱 Instalar Mani News</h4>
+          <p className="text-sm text-white/90 mb-3 leading-relaxed">
+            Tenha acesso rápido às notícias direto na tela inicial! 
+            <br />
+            <span className="text-xs opacity-80">• Notificações em tempo real</span>
+            <br />
+            <span className="text-xs opacity-80">• Funciona offline</span>
+          </p>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleDismiss}
+              className="bg-white/10 border-white/30 text-white hover:bg-white/20 text-xs px-3 py-1"
+              data-testid="button-dismiss-install"
+            >
+              Agora não
+            </Button>
+            <Button 
+              size="sm"
+              className="bg-white text-primary hover:bg-white/90 text-xs px-4 py-1 font-semibold"
+              onClick={handleInstall}
+              data-testid="button-install-pwa"
+            >
+              ⚡ Instalar Agora
+            </Button>
           </div>
         </div>
-        <div className="flex gap-2 ml-4">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={handleDismiss}
-            data-testid="button-dismiss-install"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-          <Button 
-            size="sm"
-            className="bg-primary hover:bg-secondary text-white"
-            onClick={handleInstall}
-            data-testid="button-install-pwa"
-          >
-            Instalar
-          </Button>
-        </div>
+        <Button 
+          variant="ghost" 
+          size="sm"
+          onClick={handleDismiss}
+          className="text-white hover:bg-white/10 p-1 self-start"
+          data-testid="button-close-install"
+        >
+          <X className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );

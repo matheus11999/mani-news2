@@ -9,7 +9,7 @@ import InstallPrompt from "@/components/pwa/install-prompt";
 import Home from "@/pages/home";
 import Article from "@/pages/article";
 import Categories from "@/pages/categories";
-import Trending from "@/pages/trending";
+import EmAlta from "@/pages/em-alta";
 import Search from "@/pages/search";
 import NotFound from "@/pages/not-found";
 import AdminLogin from "@/pages/admin/login";
@@ -36,7 +36,7 @@ function Router() {
       <Route path="/article/:slug" component={Article} />
       <Route path="/categories" component={Categories} />
       <Route path="/categories/:slug" component={Categories} />
-      <Route path="/trending" component={Trending} />
+      <Route path="/em-alta" component={EmAlta} />
       <Route path="/search" component={Search} />
       <Route component={NotFound} />
     </Switch>
