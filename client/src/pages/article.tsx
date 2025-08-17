@@ -107,17 +107,6 @@ export default function Article() {
       <article className="container mx-auto px-4 pt-4 pb-8 max-w-4xl page-content">
         {/* Article Header */}
         <header className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => window.history.back()}
-              className="text-gray-600 hover:text-primary"
-              data-testid="button-back"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Voltar
-            </Button>
-          </div>
 
           <div className="flex items-center justify-between mb-4">
             <Badge 

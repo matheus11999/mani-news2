@@ -54,66 +54,49 @@ export default function Categories() {
 
       <div className="page-content">
         {/* Hero Section */}
-        <section className={`py-12 mb-8 ${
+        <section className={`py-16 mb-12 ${
           selectedCategory 
-            ? `bg-gradient-to-br from-gray-100 to-gray-200` 
-            : 'bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700'
+            ? `bg-white border-b` 
+            : 'bg-gradient-to-r from-slate-900 to-slate-800'
         }`}>
           <div className="container mx-auto px-4">
-            <div className="text-center">
+            <div className="max-w-4xl mx-auto">
               {selectedCategory ? (
                 <>
-                  <div className="mb-4">
+                  <div className="mb-6">
                     <Link href="/categories">
-                      <Button variant="outline" className="mb-4 bg-white/90 hover:bg-white">
+                      <Button variant="outline" className="mb-6">
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Voltar às categorias
+                        Todas as Categorias
                       </Button>
                     </Link>
                   </div>
-                  <div 
-                    className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6"
-                    style={{ backgroundColor: selectedCategory.color }}
-                  >
-                    <BookOpen className="h-10 w-10 text-white" />
+                  <div className="flex items-center gap-4 mb-6">
+                    <div 
+                      className="w-16 h-16 rounded-2xl flex items-center justify-center"
+                      style={{ backgroundColor: selectedCategory.color }}
+                    >
+                      <BookOpen className="h-8 w-8 text-white" />
+                    </div>
+                    <div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                        {selectedCategory.name}
+                      </h1>
+                      <p className="text-gray-600 text-lg">
+                        Notícias sobre {selectedCategory.name.toLowerCase()}
+                      </p>
+                    </div>
                   </div>
-                  <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
-                    {selectedCategory.name}
-                  </h1>
-                  <p className="text-gray-600 text-xl">
-                    Últimas notícias sobre {selectedCategory.name.toLowerCase()}
-                  </p>
                 </>
               ) : (
-                <>
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
-                    <Grid3X3 className="h-10 w-10 text-white" />
-                  </div>
-                  <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-                    📁 Categorias
+                <div className="text-center">
+                  <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Categorias
                   </h1>
-                  <p className="text-white/90 text-xl mb-6 max-w-2xl mx-auto">
-                    Explore as notícias organizadas por assunto e encontre exatamente o que você procura
+                  <p className="text-gray-300 text-xl">
+                    Explore notícias organizadas por temas e assuntos
                   </p>
-                  
-                  {/* Stats */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                    <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
-                      <CardContent className="p-4 text-center">
-                        <Grid3X3 className="h-6 w-6 text-white mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-white">{categories.length}</div>
-                        <div className="text-sm text-white/80">Categorias disponíveis</div>
-                      </CardContent>
-                    </Card>
-                    <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
-                      <CardContent className="p-4 text-center">
-                        <FileText className="h-6 w-6 text-white mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-white">∞</div>
-                        <div className="text-sm text-white/80">Notícias organizadas</div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -122,43 +105,48 @@ export default function Categories() {
         <div className="container mx-auto px-4">
           {!selectedCategory ? (
             // Categories Grid
-            <section className="pb-8">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">Explore por Categoria</h2>
-                <p className="text-gray-600">Clique em uma categoria para ver as notícias relacionadas</p>
+            <section className="pb-16">
+              <div className="mb-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-3">Todas as Categorias</h2>
+                <p className="text-gray-600 text-lg">Escolha um tema para explorar as notícias</p>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {categories.map((category) => (
                   <Link
                     key={category.id}
                     href={`/categories/${category.slug}`}
                     data-testid={`category-${category.slug}`}
                   >
-                    <Card className="group cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full bg-gradient-to-br from-white to-gray-50 border-2 hover:border-primary/20">
-                      <CardContent className="p-8 text-center h-full flex flex-col justify-between">
-                        <div>
+                    <Card className="group cursor-pointer hover:shadow-xl transition-all duration-300 h-full border border-gray-200 hover:border-gray-300">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-4 mb-4">
                           <div 
-                            className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg"
+                            className="w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
                             style={{ backgroundColor: category.color }}
                           >
-                            <FileText className="h-10 w-10 text-white" />
+                            <FileText className="h-6 w-6 text-white" />
                           </div>
-                          <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
-                            {category.name}
-                          </h3>
+                          <div>
+                            <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">
+                              {category.name}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              Explorar notícias
+                            </p>
+                          </div>
                         </div>
                         
-                        <div>
-                          <Badge 
-                            style={{ backgroundColor: category.color }}
-                            className="text-white font-semibold mb-4 px-4 py-2 text-sm group-hover:shadow-lg transition-shadow"
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-400">
+                            Ver todas as notícias
+                          </span>
+                          <div 
+                            className="w-8 h-8 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                            style={{ backgroundColor: category.color + '20' }}
                           >
-                            Explorar →
-                          </Badge>
-                          <p className="text-sm text-gray-600 font-medium">
-                            Notícias atualizadas
-                          </p>
+                            <ArrowLeft className="h-4 w-4 rotate-180" style={{ color: category.color }} />
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
@@ -170,21 +158,26 @@ export default function Categories() {
             // Category Articles
             <>
               {/* Category Navigation */}
-              <section className="mb-8">
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Outras Categorias</h3>
-                  <div className="flex flex-wrap gap-3">
+              <section className="mb-12">
+                <div className="bg-gray-50 rounded-2xl p-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Explorar Outras Categorias</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {categories
                       .filter(cat => cat.id !== selectedCategory.id)
                       .slice(0, 6)
                       .map((category) => (
                       <Link key={category.id} href={`/categories/${category.slug}`}>
-                        <Badge 
-                          style={{ backgroundColor: category.color }}
-                          className="text-white font-medium hover:opacity-80 transition-opacity cursor-pointer"
-                        >
-                          {category.name}
-                        </Badge>
+                        <div className="group cursor-pointer">
+                          <div 
+                            className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200"
+                            style={{ backgroundColor: category.color }}
+                          >
+                            <FileText className="h-6 w-6 text-white" />
+                          </div>
+                          <p className="text-sm font-medium text-gray-700 group-hover:text-primary transition-colors">
+                            {category.name}
+                          </p>
+                        </div>
                       </Link>
                     ))}
                   </div>
@@ -192,26 +185,18 @@ export default function Categories() {
               </section>
 
               {/* Articles Section */}
-              <section className="pb-8">
-                <div className="flex items-center gap-3 mb-8">
-                  <div 
-                    className="inline-flex items-center justify-center w-12 h-12 rounded-xl"
-                    style={{ backgroundColor: selectedCategory.color }}
-                  >
-                    <FileText className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-3xl font-bold text-gray-900">
-                      Notícias de {selectedCategory.name}
-                    </h2>
-                    <p className="text-gray-600">
-                      {articles.length} {articles.length === 1 ? 'notícia encontrada' : 'notícias encontradas'}
-                    </p>
-                  </div>
+              <section className="pb-16">
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                    Notícias de {selectedCategory.name}
+                  </h2>
+                  <p className="text-gray-600 text-lg">
+                    {articles.length} {articles.length === 1 ? 'notícia encontrada' : 'notícias encontradas'}
+                  </p>
                 </div>
 
                 {isLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {[...Array(6)].map((_, i) => (
                       <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
                         <div className="w-full h-48 bg-gray-300"></div>
@@ -225,32 +210,25 @@ export default function Categories() {
                     ))}
                   </div>
                 ) : articles.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {articles.map((article) => (
-                      <div key={article.id} className="group">
-                        <div className="transform group-hover:scale-105 transition-transform duration-300">
-                          <NewsCard article={article} />
-                        </div>
-                      </div>
+                      <NewsCard key={article.id} article={article} />
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-16">
-                    <div 
-                      className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 opacity-50"
-                      style={{ backgroundColor: selectedCategory.color }}
-                    >
-                      <FileText className="h-10 w-10 text-white" />
+                  <div className="text-center py-20">
+                    <div className="bg-gray-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                      <FileText className="h-12 w-12 text-gray-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                      Nenhuma notícia encontrada
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                      Nenhuma notícia nesta categoria
                     </h3>
-                    <p className="text-gray-500 mb-6">
-                      Ainda não há notícias publicadas nesta categoria.
+                    <p className="text-gray-600 text-lg mb-8">
+                      Ainda não há notícias publicadas em {selectedCategory.name.toLowerCase()}.
                     </p>
                     <Link href="/">
-                      <Button>
-                        Ver todas as notícias
+                      <Button className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary/90">
+                        Ver Todas as Notícias
                       </Button>
                     </Link>
                   </div>
