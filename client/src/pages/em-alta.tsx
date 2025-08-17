@@ -81,32 +81,81 @@ export default function EmAlta() {
         </section>
 
         <div className="container mx-auto px-4">
-          {/* Top 3 Highlight */}
-          {mostViewedArticles.length >= 3 && (
+          {/* Featured Article - Destaque Principal */}
+          {mostViewedArticles.length > 0 && (
             <section className="mb-12">
               <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">🏆 Top 3 Mais Lidas</h2>
-                <p className="text-gray-600">As notícias campeãs de visualizações</p>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">⭐ Destaque do Dia</h2>
+                <p className="text-gray-600">A notícia mais visualizada de hoje</p>
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {mostViewedArticles.slice(0, 3).map((article, index) => (
-                  <div key={article.id} className="relative group">
-                    <Badge 
-                      className={`absolute -top-3 -left-3 z-20 font-bold text-lg px-3 py-1 ${
-                        index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
-                        index === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-500' :
-                        'bg-gradient-to-r from-orange-400 to-orange-600'
-                      } text-white shadow-lg`}
-                    >
-                      {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'} #{index + 1}
-                    </Badge>
-                    <div className="transform group-hover:scale-105 transition-transform duration-300">
-                      <NewsCard article={article} />
+              {/* Principal Article with full width */}
+              <div className="mb-8">
+                <div className="relative group">
+                  <Badge className="absolute -top-3 -left-3 z-20 font-bold text-xl px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white shadow-lg">
+                    🏆 DESTAQUE
+                  </Badge>
+                  <div className="bg-white rounded-2xl shadow-xl overflow-hidden group-hover:shadow-2xl transition-shadow duration-300">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                      <div className="relative">
+                        <img 
+                          src={mostViewedArticles[0].imageUrl || "/placeholder.jpg"} 
+                          alt={mostViewedArticles[0].title}
+                          className="w-full h-64 lg:h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-4 right-4">
+                          <Badge className="bg-red-500 text-white font-semibold px-3 py-1">
+                            {mostViewedArticles[0].views?.toLocaleString()} views
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="p-8 flex flex-col justify-center">
+                        {mostViewedArticles[0].category && (
+                          <Badge className="w-fit mb-4 bg-primary/10 text-primary border-primary/20">
+                            {mostViewedArticles[0].category.name}
+                          </Badge>
+                        )}
+                        <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                          {mostViewedArticles[0].title}
+                        </h3>
+                        <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                          {mostViewedArticles[0].excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm text-gray-500">
+                            {new Date(mostViewedArticles[0].publishedAt).toLocaleDateString('pt-BR')}
+                          </div>
+                          <a 
+                            href={`/artigo/${mostViewedArticles[0].slug}`} 
+                            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                          >
+                            Ler Matéria →
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
+
+              {/* Top 2-5 in smaller grid */}
+              {mostViewedArticles.length > 1 && (
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Outras em Destaque</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {mostViewedArticles.slice(1, 5).map((article, index) => (
+                      <div key={article.id} className="relative group">
+                        <Badge className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-gray-400 to-gray-600 text-white font-bold">
+                          #{index + 2}
+                        </Badge>
+                        <div className="transform group-hover:scale-105 transition-transform duration-300">
+                          <NewsCard article={article} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </section>
           )}
 

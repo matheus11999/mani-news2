@@ -104,7 +104,7 @@ export default function Article() {
         }}
       />
 
-      <article className="container mx-auto px-4 py-8 max-w-4xl page-content">
+      <article className="container mx-auto px-4 pt-4 pb-8 max-w-4xl page-content">
         {/* Article Header */}
         <header className="mb-8">
           <div className="flex items-center gap-2 mb-4">

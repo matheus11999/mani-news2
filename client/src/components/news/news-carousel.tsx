@@ -69,7 +69,7 @@ export default function NewsCarousel({ articles }: NewsCarouselProps) {
                 className="block relative group"
                 data-testid={`carousel-article-${article.slug}`}
               >
-                <div className="relative h-80 md:h-96 lg:h-[500px] overflow-hidden">
+                <div className="relative h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden">
                   <img
                     src={article.featuredImage}
                     alt={article.title}
@@ -81,37 +81,33 @@ export default function NewsCarousel({ articles }: NewsCarouselProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
                   {/* Content overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-12 text-white">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 lg:p-12 text-white">
                     <div className="max-w-4xl">
-                      <div className="flex items-center gap-4 mb-4">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
                         <Badge 
                           style={{ backgroundColor: article.category.color }}
-                          className="text-white font-semibold px-3 py-1"
+                          className="text-white font-semibold px-2 sm:px-3 py-1 text-xs sm:text-sm"
                         >
                           {article.category.name}
                         </Badge>
-                        <div className="flex items-center text-white/80 text-sm">
-                          <Calendar className="h-4 w-4 mr-2" />
+                        <div className="flex items-center text-white/80 text-xs sm:text-sm">
+                          <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                           <span>{formatRelativeTime(new Date(article.publishedAt!))}</span>
                         </div>
                       </div>
                       
-                      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 leading-tight line-clamp-2">
+                      <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 leading-tight line-clamp-2">
                         {article.title}
                       </h2>
                       
                       {article.subtitle && (
-                        <p className="text-lg md:text-xl text-white/90 mb-4 line-clamp-2">
+                        <p className="text-sm sm:text-lg md:text-xl text-white/90 mb-3 sm:mb-4 line-clamp-2 hidden sm:block">
                           {article.subtitle}
                         </p>
                       )}
                       
                       <div className="flex items-center gap-4 text-white/70">
-                        <span className="font-medium">Por {article.author}</span>
-                        <div className="flex items-center">
-                          <Eye className="h-4 w-4 mr-1" />
-                          <span>{article.views || 0} visualizações</span>
-                        </div>
+                        <span className="font-medium text-xs sm:text-sm">Notícia em destaque</span>
                       </div>
                     </div>
                   </div>
@@ -125,7 +121,7 @@ export default function NewsCarousel({ articles }: NewsCarouselProps) {
       {/* Navigation buttons */}
       <Button
         className={cn(
-          "absolute left-4 top-1/2 transform -translate-y-1/2 z-10",
+          "absolute left-4 top-1/3 transform -translate-y-1/2 z-10",
           "bg-white/20 backdrop-blur-sm border-white/30 text-white",
           "hover:bg-white/30 transition-all duration-200",
           "w-12 h-12 rounded-full p-0",
@@ -140,7 +136,7 @@ export default function NewsCarousel({ articles }: NewsCarouselProps) {
 
       <Button
         className={cn(
-          "absolute right-4 top-1/2 transform -translate-y-1/2 z-10",
+          "absolute right-4 top-1/3 transform -translate-y-1/2 z-10",
           "bg-white/20 backdrop-blur-sm border-white/30 text-white",
           "hover:bg-white/30 transition-all duration-200",
           "w-12 h-12 rounded-full p-0",

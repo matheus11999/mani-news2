@@ -135,16 +135,16 @@ export default function Categories() {
                     href={`/categories/${category.slug}`}
                     data-testid={`category-${category.slug}`}
                   >
-                    <Card className="group cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full">
-                      <CardContent className="p-6 text-center h-full flex flex-col justify-between">
+                    <Card className="group cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full bg-gradient-to-br from-white to-gray-50 border-2 hover:border-primary/20">
+                      <CardContent className="p-8 text-center h-full flex flex-col justify-between">
                         <div>
                           <div 
-                            className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300"
+                            className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg"
                             style={{ backgroundColor: category.color }}
                           >
-                            <FileText className="h-8 w-8 text-white" />
+                            <FileText className="h-10 w-10 text-white" />
                           </div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                          <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
                             {category.name}
                           </h3>
                         </div>
@@ -152,12 +152,12 @@ export default function Categories() {
                         <div>
                           <Badge 
                             style={{ backgroundColor: category.color }}
-                            className="text-white font-medium mb-3"
+                            className="text-white font-semibold mb-4 px-4 py-2 text-sm group-hover:shadow-lg transition-shadow"
                           >
-                            Ver Notícias
+                            Explorar →
                           </Badge>
-                          <p className="text-sm text-gray-500">
-                            Explore as últimas notícias
+                          <p className="text-sm text-gray-600 font-medium">
+                            Notícias atualizadas
                           </p>
                         </div>
                       </CardContent>

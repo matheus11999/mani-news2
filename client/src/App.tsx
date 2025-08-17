@@ -55,7 +55,7 @@ function App() {
         ) : (
           <div className="min-h-screen bg-gray-50">
             <Header />
-            <main className="pt-14 pb-20 md:pb-4 md:pl-20">
+            <main className="pt-14 pb-20 md:pb-8 md:pl-20 lg:pl-24">
               <Router />
             </main>
             <BottomNavigation />

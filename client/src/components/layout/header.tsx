@@ -8,10 +8,10 @@ export default function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center h-14">
           <Link href="/" className="flex items-center space-x-2" data-testid="link-home">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Newspaper className="text-white h-4 w-4" />
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-lg flex items-center justify-center">
+              <Newspaper className="text-white h-4 w-4 md:h-5 md:w-5" />
             </div>
-            <span className="text-xl font-bold text-primary">Mani News</span>
+            <span className="text-xl md:text-2xl font-bold text-primary">Mani News</span>
           </Link>
         </div>
       </div>

@@ -45,32 +45,45 @@ export default function Search() {
 
       <div className="page-content">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-primary to-secondary py-8 mb-6">
+        <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 py-16 mb-8">
           <div className="container mx-auto px-4">
             <div className="text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                Buscar Notícias
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 animate-pulse">
+                <SearchIcon className="h-10 w-10 text-white" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                🔍 Buscar Notícias
               </h1>
-              <p className="text-red-100 text-lg">
-                Encontre notícias sobre qualquer assunto
+              <p className="text-white/90 text-xl mb-8 max-w-2xl mx-auto">
+                Encontre exatamente o que você procura em nosso acervo de notícias
               </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Search Section */}
-        <section className="container mx-auto px-4 mb-8">
-          <div className="max-w-2xl mx-auto">
-            <div className="relative">
-              <Input
-                type="text"
-                placeholder="Digite sua busca..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 py-4 text-lg border-2 border-gray-300 focus:border-primary"
-                data-testid="input-search-page"
-              />
-              <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              
+              {/* Search Box in Hero */}
+              <div className="max-w-3xl mx-auto">
+                <div className="relative group">
+                  <Input
+                    type="text"
+                    placeholder="Digite o que você está procurando..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-14 pr-6 py-6 text-lg border-0 bg-white/95 backdrop-blur-sm shadow-2xl rounded-2xl focus:bg-white focus:ring-4 focus:ring-white/30 transition-all duration-300 group-hover:shadow-3xl"
+                    data-testid="input-search-page"
+                  />
+                  <SearchIcon className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500 h-6 w-6 group-focus-within:text-primary transition-colors" />
+                  {searchQuery && (
+                    <div className="absolute right-5 top-1/2 transform -translate-y-1/2">
+                      <div className="flex items-center space-x-2">
+                        {isLoading && (
+                          <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                        )}
+                        <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                          {searchResults.length} resultado{searchResults.length !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -78,14 +91,30 @@ export default function Search() {
         {/* Search Results */}
         <section className="container mx-auto px-4 pb-8">
           {!debouncedQuery.trim() ? (
-            <div className="text-center py-12">
-              <SearchIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                Digite algo para começar sua busca
-              </h2>
-              <p className="text-gray-600">
-                Use palavras-chave para encontrar notícias sobre seus temas favoritos
-              </p>
+            <div className="text-center py-16">
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-12 max-w-2xl mx-auto">
+                <div className="bg-gradient-to-br from-blue-500 to-purple-600 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <SearchIcon className="h-12 w-12 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Pronto para descobrir?
+                </h2>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  Digite palavras-chave na busca acima para encontrar notícias sobre seus temas favoritos. 
+                  Nossa busca é inteligente e busca em títulos, resumos e conteúdo completo.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-2">
+                  {['política', 'economia', 'esportes', 'tecnologia', 'saúde'].map((tag) => (
+                    <button
+                      key={tag}
+                      onClick={() => setSearchQuery(tag)}
+                      className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium hover:bg-primary/20 transition-colors"
+                    >
+                      #{tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -103,26 +132,53 @@ export default function Search() {
             </div>
           ) : searchResults.length > 0 ? (
             <>
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-700">
-                  {searchResults.length} resultado{searchResults.length !== 1 ? 's' : ''} para "{debouncedQuery}"
-                </h2>
+              <div className="mb-8">
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-6 border border-green-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                      <SearchIcon className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-900">
+                        ✨ {searchResults.length} resultado{searchResults.length !== 1 ? 's encontrados' : ' encontrado'}
+                      </h2>
+                      <p className="text-gray-600">
+                        Resultados para: <span className="font-semibold text-primary">"{debouncedQuery}"</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {searchResults.map((article) => (
-                  <NewsCard key={article.id} article={article} />
+                {searchResults.map((article, index) => (
+                  <div key={article.id} className="group">
+                    <div className="transform group-hover:scale-105 transition-transform duration-300">
+                      <NewsCard article={article} />
+                    </div>
+                  </div>
                 ))}
               </div>
             </>
           ) : (
-            <div className="text-center py-12">
-              <SearchIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                Nenhum resultado encontrado
-              </h2>
-              <p className="text-gray-600">
-                Tente usar palavras-chave diferentes ou verifique a ortografia
-              </p>
+            <div className="text-center py-16">
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-12 max-w-2xl mx-auto">
+                <div className="bg-gradient-to-br from-gray-400 to-gray-600 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <SearchIcon className="h-12 w-12 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  😔 Nenhum resultado encontrado
+                </h2>
+                <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                  Não encontramos notícias relacionadas a "<span className="font-semibold">{debouncedQuery}</span>".
+                  <br />Tente usar palavras-chave diferentes ou verifique a ortografia.
+                </p>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                >
+                  ← Nova Busca
+                </button>
+              </div>
             </div>
           )}
         </section>

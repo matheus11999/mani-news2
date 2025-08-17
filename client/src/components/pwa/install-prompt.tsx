@@ -83,32 +83,17 @@ export default function InstallPrompt() {
         </div>
         <div className="flex-1 text-white">
           <h4 className="font-bold text-base mb-1">📱 Instalar Mani News</h4>
-          <p className="text-sm text-white/90 mb-3 leading-relaxed">
-            Tenha acesso rápido às notícias direto na tela inicial! 
-            <br />
-            <span className="text-xs opacity-80">• Notificações em tempo real</span>
-            <br />
-            <span className="text-xs opacity-80">• Funciona offline</span>
+          <p className="text-sm text-white/90 mb-4 leading-relaxed">
+            Tenha acesso rápido às notícias direto na tela inicial do seu dispositivo!
           </p>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleDismiss}
-              className="bg-white/10 border-white/30 text-white hover:bg-white/20 text-xs px-3 py-1"
-              data-testid="button-dismiss-install"
-            >
-              Agora não
-            </Button>
-            <Button 
-              size="sm"
-              className="bg-white text-primary hover:bg-white/90 text-xs px-4 py-1 font-semibold"
-              onClick={handleInstall}
-              data-testid="button-install-pwa"
-            >
-              ⚡ Instalar Agora
-            </Button>
-          </div>
+          <Button 
+            size="sm"
+            className="bg-white text-primary hover:bg-white/90 text-sm px-6 py-2 font-semibold w-full"
+            onClick={handleInstall}
+            data-testid="button-install-pwa"
+          >
+            ⚡ Instalar Agora
+          </Button>
         </div>
         <Button 
           variant="ghost" 

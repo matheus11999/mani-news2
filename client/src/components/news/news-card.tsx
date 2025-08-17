@@ -79,12 +79,12 @@ export default function NewsCard({ article, compact = false }: NewsCardProps) {
             <Button
               size="sm"
               variant="ghost"
-              className="flex items-center space-x-2 text-green-600 hover:text-green-700 hover:bg-green-50"
+              className="flex items-center space-x-1 md:space-x-2 text-green-600 hover:text-green-700 hover:bg-green-50"
               onClick={handleShare}
               data-testid="button-share-whatsapp"
             >
               <MessageCircle className="h-4 w-4" />
-              <span className="text-sm font-medium">Compartilhar</span>
+              <span className="text-xs md:text-sm font-medium hidden sm:inline">Compartilhar</span>
             </Button>
           </div>
         </div>
